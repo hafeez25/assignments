@@ -23,10 +23,17 @@ class Todo {
     this.tasks.splice(index, 1);
   }
   update(index, newTask) {
+    if (index >= this.tasks.length) {
+      console.log("Index out of bound");
+      return;
+    }
     this.tasks[index] = newTask;
   }
   get(index) {
-    return this.tasks[index];
+    if (index < this.tasks.length) {
+      return this.tasks[index];
+    }
+    return null;
   }
   clear() {
     this.tasks.splice(0);
@@ -35,13 +42,14 @@ class Todo {
 
 const myTodo = new Todo();
 myTodo.add("HELOO Wordl");
-myTodo.add("HELOO Wordl");
-myTodo.add("HELOO Wordl");
+// myTodo.add("HELOO Wordl");
+// myTodo.add("HELOO Wordl");
 
-myTodo.remove(1);
-myTodo.remove(1);
-myTodo.update(0, "I'm Hafizur RAhman");
-myTodo.clear();
+// myTodo.remove(3);
+// myTodo.remove(1);
+// myTodo.update(2, "I'm Hafizur Rahman");
+console.log(myTodo.get());
+// myTodo.clear()
 console.log(myTodo.getAll());
 
 module.exports = Todo;
