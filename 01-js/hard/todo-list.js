@@ -24,7 +24,6 @@ class Todo {
   }
   update(index, newTask) {
     if (index >= this.tasks.length) {
-      console.log("Index out of bound");
       return;
     }
     this.tasks[index] = newTask;
@@ -39,17 +38,5 @@ class Todo {
     this.tasks.splice(0);
   }
 }
-
-const myTodo = new Todo();
-myTodo.add("HELOO Wordl");
-// myTodo.add("HELOO Wordl");
-// myTodo.add("HELOO Wordl");
-
-// myTodo.remove(3);
-// myTodo.remove(1);
-// myTodo.update(2, "I'm Hafizur Rahman");
-console.log(myTodo.get());
-// myTodo.clear()
-console.log(myTodo.getAll());
 
 module.exports = Todo;

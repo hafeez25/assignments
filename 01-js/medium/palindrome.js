@@ -6,7 +6,6 @@
 function isPalindrome(str) {
   str = str.toLowerCase();
   str = str.replace(/[^\w]/g, "");
-  console.log(str);
 
   let start = 0;
   let end = str.length - 1;
@@ -22,7 +21,5 @@ function isPalindrome(str) {
   }
   return true;
 }
-
-console.log(isPalindrome("Eva, can I see bees in a cave?"));
 
 module.exports = isPalindrome;

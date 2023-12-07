@@ -14,16 +14,13 @@ function isAnagram(str1, str2) {
     let num = str1.toLowerCase().charCodeAt(i);
 
     arr[num]++;
-    console.log(arr[num]);
   }
   for (let i = 0; i < str2.length; i++) {
     let num = str2.toLowerCase().charCodeAt(i);
     arr[num]--;
-    console.log(arr[num]);
   }
 
   for (let i = 0; i < arr.length; i++) {
-    // console.log(arr[i]);
     if (arr[i] != 0) {
       return false;
     }

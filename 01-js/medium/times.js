@@ -17,4 +17,3 @@ function calculateTime(n) {
 }
 
 const response = calculateTime(1000000000);
-console.log(response);

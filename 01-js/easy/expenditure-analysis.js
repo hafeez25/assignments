@@ -62,7 +62,4 @@ const transactions = [
   },
 ];
 
-const result = calculateTotalSpentByCategory(transactions);
-console.log(result);
-
 module.exports = calculateTotalSpentByCategory;
