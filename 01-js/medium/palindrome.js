@@ -11,14 +11,6 @@ function isPalindrome(str) {
   while (start <= end) {
     let ch1 = str.charAt(start);
     let ch2 = str.charAt(end);
-    while (ch1 < "a" || ch1 > "z") {
-      start++;
-      ch1 = str.charAt(start);
-    }
-    while (ch2 < "a" || ch2 > "z") {
-      end--;
-      ch2 = str.charAt(end);
-    }
 
     if (ch1 !== ch2) {
       return false;
