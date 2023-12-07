@@ -5,6 +5,8 @@
 
 function isPalindrome(str) {
   str = str.toLowerCase();
+  str = str.replace(/[^\w]/g, "");
+  console.log(str);
 
   let start = 0;
   let end = str.length - 1;
