@@ -55,9 +55,26 @@ app.get("/todos", (req, res) => {
   res.json(todos);
 });
 
+// 2- return specific todo
+app.get("/todos/:id", (req, res) => {
+  const { id } = req.params;
+  const data = fs.readFileSync("todos.json", "utf-8");
+  const jsonData = JSON.parse(data);
+  const isFound = jsonData.filter((data) => {
+    if (data._id == id) {
+      return data;
+    }
+  });
+  if (isFound.length > 0) {
+    res.status(200);
+    res.json(isFound);
+  } else {
+    res.status(404);
+    res.json("Items not found!");
+  }
+});
+
 // 3 - Create todo item
-//  Example: POST http://localhost:3000/todos
-// Request Body: { "title": "Buy groceries", "completed": false, description: "I should buy groceries" }
 app.post("/todos", async (req, res) => {
   const { title, completed, description } = req.body;
   const data = fs.readFileSync("todos.json");
