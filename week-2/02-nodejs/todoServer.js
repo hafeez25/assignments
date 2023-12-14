@@ -39,11 +39,27 @@
 
   Testing the server - run `npm run test-todoServer` command in terminal
  */
-  const express = require('express');
-  const bodyParser = require('body-parser');
-  
-  const app = express();
-  
-  app.use(bodyParser.json());
-  
-  module.exports = app;
+const express = require("express");
+const bodyParser = require("body-parser");
+const { v4: uuidv4 } = require("uuid");
+const todos = require("./todos.json");
+
+const app = express();
+
+app.use(bodyParser.json());
+
+// 1.GET /todos - Retrieve all todo items
+//   Description: Returns a list of all todo items.
+//   Response: 200 OK with an array of todo items in JSON format.
+//   Example: GET http://localhost:3000/todos
+
+app.get("/todos", (req, res) => {
+  res.send(todos);
+});
+
+const port = 3000;
+app.listen(port, () => {
+  console.log(`server started on PORT ${port}`);
+});
+
+module.exports = app;
