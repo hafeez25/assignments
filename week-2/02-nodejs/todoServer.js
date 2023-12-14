@@ -49,7 +49,7 @@ const todos = [];
 function findIndex(arr, id) {
   console.log(id);
   for (let i = 0; i < arr.length; i++) {
-    if (arr[i]._id === id) return i;
+    if (arr[i].id === id) return i;
   }
   return -1;
 }
@@ -72,7 +72,7 @@ app.get("/todos", (req, res) => {
 app.get("/todos/:id", (req, res) => {
   const { id } = req.params;
 
-  const todo = todos.find((t) => t._id === id);
+  const todo = todos.find((t) => t.id === parseInt(id));
   if (!todo) {
     res.status(404);
     res.send();
@@ -87,7 +87,7 @@ app.post("/todos", async (req, res) => {
   const { title, completed, description } = req.body;
 
   const task = {
-    _id: uuidv4(),
+    id: Math.floor(Math.random() * 1000000),
     title,
     completed,
     description,
@@ -108,7 +108,7 @@ app.put("/todos/:id", (req, res) => {
     res.send();
   } else {
     const updateData = {
-      _id: todos[index]._id,
+      id: todos[index].id,
       title: title ? title : todos[index].title,
       completed: completed ? completed : todos[index].completed,
       description: description ? description : todos[index].description,
