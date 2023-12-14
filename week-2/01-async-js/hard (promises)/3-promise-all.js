@@ -43,7 +43,7 @@ function calculateTime(t1, t2, t3) {
     // return 0;
   });
 }
-// const resp = calculateTime(1, 2, 3);
-// console.log(resp);
+const resp = calculateTime(1, 2, 3);
+console.log(resp);
 
 module.exports = calculateTime;
