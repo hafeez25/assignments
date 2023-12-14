@@ -41,6 +41,7 @@
  */
 const express = require("express");
 const bodyParser = require("body-parser");
+const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
 const todos = require("./todos.json");
 
@@ -48,13 +49,37 @@ const app = express();
 
 app.use(bodyParser.json());
 
-// 1.GET /todos - Retrieve all todo items
-//   Description: Returns a list of all todo items.
-//   Response: 200 OK with an array of todo items in JSON format.
-//   Example: GET http://localhost:3000/todos
-
+// 1 - Retrive all todos from file
 app.get("/todos", (req, res) => {
-  res.send(todos);
+  res.status(200);
+  res.json(todos);
+});
+
+// 3 - Create todo item
+//  Example: POST http://localhost:3000/todos
+// Request Body: { "title": "Buy groceries", "completed": false, description: "I should buy groceries" }
+app.post("/todos", async (req, res) => {
+  const { title, completed, description } = req.body;
+  const data = fs.readFileSync("todos.json");
+  const jsonData = JSON.parse(data);
+
+  const task = {
+    _id: uuidv4(),
+    title,
+    completed,
+    description,
+  };
+  jsonData.push(task);
+
+  fs.writeFileSync("todos.json", JSON.stringify(jsonData), (err) => {
+    if (err) {
+      res.status(401);
+      res.json({ message: "Something went wrong" });
+      return;
+    }
+  });
+  res.status(201);
+  res.json(task);
 });
 
 const port = 3000;
