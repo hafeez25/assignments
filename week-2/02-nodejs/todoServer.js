@@ -49,7 +49,7 @@ const todos = [];
 function findIndex(arr, id) {
   console.log(id);
   for (let i = 0; i < arr.length; i++) {
-    if (arr[i].id === id) return i;
+    if (arr[i].id === parseInt(id)) return i;
   }
   return -1;
 }
@@ -83,45 +83,33 @@ app.get("/todos/:id", (req, res) => {
 });
 
 // 3 - Create todo item
-app.post("/todos", async (req, res) => {
-  const { title, completed, description } = req.body;
+app.post("/todos", (req, res) => {
+  const { title, description } = req.body;
 
-  const task = {
+  const newTodo = {
     id: Math.floor(Math.random() * 1000000),
     title,
-    completed,
     description,
   };
-  todos.push(task);
+  todos.push(newTodo);
 
   res.status(201);
-  res.json(task);
+  res.json(newTodo);
 });
 
 // 4- - update task in json file
 app.put("/todos/:id", (req, res) => {
-  const { id } = req.params;
-  const { title, completed, description } = req.body;
-  const index = findIndex(todos, id);
-  if (index == -1) {
-    res.status(404);
-    res.send();
+  const todoIndex = todos.findIndex((t) => t.id === parseInt(req.params.id));
+  if (todoIndex === -1) {
+    res.status(404).send();
   } else {
-    const updateData = {
-      id: todos[index].id,
-      title: title ? title : todos[index].title,
-      completed: completed ? completed : todos[index].completed,
-      description: description ? description : todos[index].description,
-    };
-
-    todos[index] = updateData;
-
-    res.status(201);
-    res.json(updateData);
+    todos[todoIndex].title = req.body.title;
+    todos[todoIndex].description = req.body.description;
+    res.json(todos[todoIndex]);
   }
 });
 
-app.delete("/todos/:id", async (req, res) => {
+app.delete("/todos/:id", (req, res) => {
   const { id } = req.params;
   const index = findIndex(todos, id);
   console.log(index);
@@ -130,14 +118,15 @@ app.delete("/todos/:id", async (req, res) => {
     res.send();
   } else {
     todos.splice(index, 1);
+    console.log(todos);
     res.status(200);
     res.send();
   }
 });
 
-const port = 3000;
-app.listen(port, () => {
-  console.log(`server started on PORT ${port}`);
-});
+// const port = 3000;
+// app.listen(port, () => {
+//   console.log(`server started on PORT ${port}`);
+// });
 
 module.exports = app;
