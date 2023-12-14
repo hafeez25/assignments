@@ -5,6 +5,13 @@
  */
 
 function sleep(milliseconds) {
+  return new Promise((resolve) => {
+    const intervalId = setInterval(() => resolve(), milliseconds);
+    // clearInterval(intervalId, milliseconds);
+    setTimeout(() => {
+      clearInterval(intervalId);
+    }, milliseconds);
+  });
 }
 
 module.exports = sleep;
