@@ -43,9 +43,10 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
+const todos = require("./todos.json");
 const app = express();
 app.use(bodyParser.json());
-const todos = [];
+
 function findIndex(arr, id) {
   console.log(id);
   for (let i = 0; i < arr.length; i++) {
@@ -71,20 +72,23 @@ app.get("/todos", (req, res) => {
 // 2- return specific todo
 app.get("/todos/:id", (req, res) => {
   const { id } = req.params;
-
-  const todo = todos.find((t) => t._id === id);
-  if (!todo) {
-    res.status(404);
-    res.send();
-  } else {
+  const data = fs.readFileSync("todos.json", "utf-8");
+  const jsonData = JSON.parse(data);
+  const isFound = findIndex(jsonData, id);
+  if (isFound != -1) {
     res.status(200);
-    res.json(todo);
+    res.json(jsonData[isFound]);
+  } else {
+    res.status(404);
+    res.json("Items not found!");
   }
 });
 
 // 3 - Create todo item
 app.post("/todos", async (req, res) => {
   const { title, completed, description } = req.body;
+  const data = fs.readFileSync("todos.json");
+  const jsonData = JSON.parse(data);
 
   const task = {
     _id: uuidv4(),
@@ -92,8 +96,15 @@ app.post("/todos", async (req, res) => {
     completed,
     description,
   };
-  todos.push(task);
+  jsonData.push(task);
 
+  fs.writeFileSync("todos.json", JSON.stringify(jsonData), (err) => {
+    if (err) {
+      res.status(401);
+      res.json({ message: "Something went wrong" });
+      return;
+    }
+  });
   res.status(201);
   res.json(task);
 });
@@ -102,22 +113,27 @@ app.post("/todos", async (req, res) => {
 app.put("/todos/:id", (req, res) => {
   const { id } = req.params;
   const { title, completed, description } = req.body;
-  const index = findIndex(todos, id);
+  const data = fs.readFileSync("todos.json", "utf-8");
+  const jsonData = JSON.parse(data);
+  const index = findIndex(jsonData, id);
   if (index == -1) {
     res.status(404);
-    res.send();
+    res.json("Task not found!");
   } else {
     const updateData = {
-      _id: todos[index]._id,
-      title: title ? title : todos[index].title,
-      completed: completed ? completed : todos[index].completed,
-      description: description ? description : todos[index].description,
+      _id: jsonData[index]._id,
+      title: title ? title : jsonData[index].title,
+      completed: completed ? completed : jsonData[index].completed,
+      description: description ? description : jsonData[index].description,
     };
 
-    todos[index] = updateData;
-
-    res.status(201);
-    res.json(updateData);
+    jsonData[index] = updateData;
+    fs.writeFile("todos.json", JSON.stringify(jsonData), (err) => {
+      if (err) throw Error;
+      console.log("hel");
+      res.status(201);
+      res.json(updateData);
+    });
   }
 });
 
