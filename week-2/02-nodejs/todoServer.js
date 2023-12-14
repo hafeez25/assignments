@@ -123,23 +123,15 @@ app.put("/todos/:id", (req, res) => {
 
 app.delete("/todos/:id", async (req, res) => {
   const { id } = req.params;
-  const data = await fs.readFileSync("todos.json");
-  const jsonData = JSON.parse(data);
-  const index = findIndex(jsonData, id);
+  const index = findIndex(todos, id);
   console.log(index);
   if (index == -1) {
     res.status(404);
     res.send();
   } else {
-    const updateData = removeAtIndex(jsonData, index);
-
-    fs.writeFile("todos.json", JSON.stringify(updateData), (err) => {
-      if (err) {
-        throw err;
-      }
-      res.status(200);
-      res.send();
-    });
+    todos.splice(index, 1);
+    res.status(200);
+    res.send();
   }
 });
 
