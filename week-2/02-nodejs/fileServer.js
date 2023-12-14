@@ -15,10 +15,14 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
+const files = path.basename("/files");
+
 const app = express();
 
 app.get("/files", (req, res) => {
-  fs.
+  const fileName = fs.readdirSync(files);
+  console.log(fileName);
+  res.json(JSON.stringify(fileName));
 });
-
+app.listen(3000);
 module.exports = app;
