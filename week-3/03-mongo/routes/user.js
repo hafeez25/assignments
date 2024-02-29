@@ -50,8 +50,9 @@ router.post("/courses/:courseId", userMiddleware, async (req, res) => {
     .json({ message: "Course purchased successfully", course: course });
 });
 
-router.get("/purchasedCourses", userMiddleware, async (req, res) => {
+router.get("/purchasedcourses", userMiddleware, async (req, res) => {
   // Implement fetching purchased courses logic
+  const username = req.headers.username;
   const user = await User.findOne({
     username: username,
   });
