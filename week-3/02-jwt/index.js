@@ -1,6 +1,33 @@
-const jwt = require('jsonwebtoken');
-const jwtPassword = 'secret';
+const jwt = require("jsonwebtoken");
+const jwtPassword = "secret";
 
+function isValidEmail(email) {
+  // Regular expression for validating an Email address
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+function isValidPassword(password) {
+  // Check if the password is at least 6 characters long
+  if (password.length < 6) {
+    return false;
+  }
+
+  // Check if the password contains at least one special character
+  const specialCharRegex = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/;
+  if (!specialCharRegex.test(password)) {
+    return false;
+  }
+
+  // Check if the password contains at least one uppercase letter
+  const uppercaseRegex = /[A-Z]/;
+  if (!uppercaseRegex.test(password)) {
+    return false;
+  }
+
+  // If all conditions pass, the password is valid
+  return true;
+}
 
 /**
  * Generates a JWT for a given username and password.
@@ -14,7 +41,13 @@ const jwtPassword = 'secret';
  *                        the password does not meet the length requirement.
  */
 function signJwt(username, password) {
-    // Your code here
+  // Your code here
+  if (isValidEmail(username) && isValidPassword(password)) {
+    const token = jwt.sign({ username }, jwtPassword);
+    return token;
+  } else {
+    return null;
+  }
 }
 
 /**
@@ -26,7 +59,13 @@ function signJwt(username, password) {
  *                    using the secret key.
  */
 function verifyJwt(token) {
-    // Your code here
+  // Your code here
+  try {
+    const verify = jwt.verify(token, jwtPassword);
+    return true;
+  } catch (err) {
+    return false;
+  }
 }
 
 /**
@@ -37,9 +76,18 @@ function verifyJwt(token) {
  *                         Returns false if the token is not a valid JWT format.
  */
 function decodeJwt(token) {
-    // Your code here
+  // Your code here
+  try {
+    const decode = jwt.decode(token);
+    if (decode.username) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    return false;
+  }
 }
-
 
 module.exports = {
   signJwt,
