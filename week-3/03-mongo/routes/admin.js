@@ -8,11 +8,11 @@ router.post("/signup", async (req, res) => {
   // Implement admin signup logic
   try {
     const { username, password } = req.body;
-    const user = new Admin({
+    await Admin.create({
       username,
       password,
     });
-    await user.save();
+
     res.status(201).json({ message: "Admin created successfully" });
   } catch (err) {
     res.status(400).json({ message: err });
@@ -26,7 +26,7 @@ router.post("/courses", adminMiddleware, async (req, res) => {
     res.status(400).json({ message: "Please enter all requied fields!" });
   }
   try {
-    const course = new Course({
+    const course = await Course.create({
       title,
       description,
       price,
@@ -44,8 +44,8 @@ router.post("/courses", adminMiddleware, async (req, res) => {
 router.get("/courses", adminMiddleware, async (req, res) => {
   // Implement fetching all courses logic
   try {
-    const course = await Course.find();
-    res.status(200).json(course);
+    const courses = await Course.find({});
+    res.status(200).json({course:courses});
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: err });
