@@ -16,18 +16,25 @@ db.once("open", () => {
 // Define schemas
 const AdminSchema = new mongoose.Schema({
   // Schema definition here
-  username: String,
+  username: {
+    type: String,
+    unique: true,
+  },
   password: String,
 });
 
 const UserSchema = new mongoose.Schema({
   // Schema definition here
-  username: String,
+  username: {
+    type: String,
+    unique: true,
+  },
   password: String,
   purchasedCourse: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",
+      unique: true,
     },
   ],
 });

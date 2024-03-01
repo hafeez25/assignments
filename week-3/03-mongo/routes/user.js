@@ -8,12 +8,18 @@ router.post("/signup", async (req, res) => {
   // Implement user signup logic
   try {
     const { username, password } = req.body;
-    await User.create({
+    User.create({
       username,
       password,
-    });
-
-    res.status(201).json({ message: "User created successfully" });
+    })
+      .then((res) => {
+        res.status(201).json({ message: "User created successfully" });
+      })
+      .catch((err) => {
+        res
+          .status(411)
+          .json({ message: "Please enter valid email and password" });
+      });
   } catch (err) {
     res.status(400).json({ message: err });
   }

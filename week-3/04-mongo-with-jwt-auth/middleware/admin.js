@@ -9,15 +9,13 @@ function adminMiddleware(req, res, next) {
   const token = req.headers.authorization;
   const words = token.split(" ");
   const jwtToken = words[1];
+  console.log(jwtToken);
   try {
-    const decodedValue = jwt.verify(jwtToken);
-    if (decodedValue.username) {
-      next();
-    } else {
-      res.status(403).json({ message: "You are not authenticated" });
-    }
+    jwtDecode = jwt.verify(jwtToken, jwtSecret);
+    req.username = jwtDecode.username;
+    next();
   } catch (error) {
-    res.status(403).json({ message: "Invalid inputs" });
+    res.status(403).json({ message: "You are not authenticated" });
   }
 }
 
